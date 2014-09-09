@@ -1,0 +1,19 @@
+{
+  "name": "mood-tracker",
+  "version": "0.0.1",
+  "description": "An app that keeps track of your mood everyday.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alice Chen",
+  "license": "MIT",
+  "dependencies": {
+  	"express": "^4.8.2",
+    "request": "^2.40.0",
+    "mongoose": "^3.8.14",
+    "moment": "^2.8.1",
+    "jwt-simple": "^0.2.0",
+    "body-parser": "^1.6.2"
+  }
+}
