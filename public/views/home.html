@@ -2,7 +2,15 @@
     <div class="panel panel-default">
     <div class="panel-heading">Welcome</div>
     <div class="panel-body">
-        <p>Hello! Mood Tracker lets you log your mood everyday and see how others are feeling!</p>
+        <p>
+        	Hello! Mood Tracker lets you log your mood everyday throughout your Hacker School experience!
+        </p>
+        <p ng-if="!isAuthenticated()">
+        	Please <a href="/" ng-click="login($event)">Login</a></li> with your Hacker School credentials to log your mood!
+        </p>
+        <p ng-if="isAuthenticated()">
+        	See your <a href="/#/mood">Mood Log</a>.
+        </p>
     </div>
     </div>
 </div>
