@@ -17,7 +17,9 @@ var config = require('./config');
 var userSchema = new mongoose.Schema({
 	displayName: String,
 	hsId: String,
-	mood: []
+	startDate: Date,
+	endDate: Date,
+	moods: []
 });
 
 var User = mongoose.model('User', userSchema);
@@ -36,7 +38,7 @@ app.use(express.static(__dirname + '/public'));
 
 /*
  |--------------------------------------------------------------------------
- | Login Required Middleware
+ | Login required middleware
  |--------------------------------------------------------------------------
  */
 function ensureAuthenticated(req, res, next) {
@@ -51,7 +53,7 @@ function ensureAuthenticated(req, res, next) {
 		return res.status(401).send({ message: 'Token has expired' });
 	}
 
-	req.user = payload.sub;
+	req.userId = payload.sub;
 	next();
 }
 
@@ -75,15 +77,6 @@ function createToken(req, user) {
  |  Endpoints
  |--------------------------------------------------------------------------
  */
-
-app.get('/mood', function(req, res) {
-	res.send(200, {mood: 'happy'});
-});
-
-app.get('/mood/all', function(req, res) {
-	res.send(200, {moods: ['happy', 'soso', 'sad']});
-});
-
 app.post('/auth/hackerschool', function(req, res) {
     var accessTokenUrl = 'https://www.hackerschool.com/oauth/token';
     var peopleApiUrl = 'https://www.hackerschool.com/api/v1/people/me';
@@ -103,7 +96,7 @@ app.post('/auth/hackerschool', function(req, res) {
 	
 		// Step 2. Retrieve profile information about the current user.
 		request.get({ url: peopleApiUrl, headers: headers, json: true }, function(err, response, profile) {
-			User.findOne({ hackerschool: profile.id }, function(err, existingUser) {
+			User.findOne({hsId: profile.id}, function(err, existingUser) {
 				// Step 3b. Create a new user account or return an existing one.
 				if (existingUser) {
 					return res.send({
@@ -113,18 +106,75 @@ app.post('/auth/hackerschool', function(req, res) {
 				var user = new User();
 				user.hsId = profile.id;
 				user.displayName = profile.first_name + ' ' + profile.last_name;
+				user.startDate = profile.batch.start_date;
+				user.endDate = profile.batch.end_date;
+
 				user.save(function(err) {
-					console.log(user);
-					res.send({token: createToken(req, user)});
+					res.send({
+						token: createToken(req, user),
+					});
 				});
 			});
 		});
 	});
  });
 
+app.get('/api/me', ensureAuthenticated, function(req, res) {
+	User.findById(req.userId, function(err, user) {
+		if (!user) {
+			return res.status(404).send({
+				message: 'User not found.'
+			});
+		}
+		return res.send(user);
+	})
+});
+
+app.put('/api/me', ensureAuthenticated, function() {
+
+});
+
+app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
+	User.findById(req.userId, function(err, user) {
+		if (!user) {
+			return res.status(404).send({
+				message: 'User not found.'
+			});
+		}
+
+		var moods = user.moods,
+			today = moment().format('YYYY-MM-DD');
+		// check if today's mood has already been logged
+		// if so, remove the record
+		for (var i = 0; i < moods.length; i++) {
+			if (moods[i].date.toString() === today) {
+				moods.splice(i, 1);
+				break;
+			}
+		}
+		user.moods.push({
+			date: today,
+			mood: req.body.mood
+		});
+
+		user.save(function(err) {
+			res.status(200).end();
+		});
+	})
+});
+
 /*
  |--------------------------------------------------------------------------
- | Start the Server
+ | Helper methods
+ |--------------------------------------------------------------------------
+ */
+ function findUser(userId) {
+ 	// TODO: use promise
+ }
+
+/*
+ |--------------------------------------------------------------------------
+ | Start the server
  |--------------------------------------------------------------------------
  */
 app.listen(app.get('port'), function() {
