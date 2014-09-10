@@ -1,5 +1,5 @@
 angular.module('MoodTracker')
-    .controller('AuthController', function($scope, $auth, $alert) {
+    .controller('AuthController', function($scope, $auth, $alert, $location) {
         var fade = 'fadeZoomFadeDown',
             type = 'material'
             duration = 3;
@@ -13,6 +13,7 @@ angular.module('MoodTracker')
                 e.preventDefault(); // prevent href anchor
                 
                 $scope.name = response.data.name;
+                $location.path('/mood');
                 
                 $alert({
                     content: 'You have successfully logged in.',
@@ -20,6 +21,8 @@ angular.module('MoodTracker')
                     type: type,
                     duration: duration
                 });
+
+                
             }).catch(function(response) {
                 $alert({
                     content: response.data,
