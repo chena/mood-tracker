@@ -14,6 +14,15 @@ var generateMoodSeeds = function(startDate) {
     return dailyMoods;
 };
 
+var writeToFile = function(data) {
+    fs.writeFile(base + '/' + fname, JSON.stringify(data), function(err) {
+        if (err) {
+            throw err;
+        }
+        console.log('file written!');
+    });
+};
+
 var args = process.argv;
 if (args.length < 3) {
     console.error('usage: node util/seeds.js <filename> [<start_date>]');
@@ -29,19 +38,22 @@ if (!moment(startDate).isValid()) {
     process.exit(1);
 }
 
+var data = generateMoodSeeds(startDate);
 fs.stat(base, function(err, s) {
-    if (err && err.errno === 34) {
-        fs.mkdir('util/data', function(err) {
-            console.error('unable to create data directory');
-            process.exit(1);
-        });
-    }
-    var data = generateMoodSeeds(startDate);
-    fs.writeFile(base + '/' + fname, JSON.stringify(data), function(err) {
-        if (err) {
-            throw err;
+    if (err) {
+        if (err.errno === 34) {
+            fs.mkdir('util/data', function(err) {
+                if (err) {
+                    console.error('unable to create data directory');
+                    process.exit(1);
+                }
+                writeToFile(data);
+            });
+        } else {
+            throw err; 
         }
-        console.log('file written!');
-    });
+    } else {
+        writeToFile(data);
+    } 
 });
 
