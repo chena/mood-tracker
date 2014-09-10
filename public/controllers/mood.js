@@ -1,5 +1,11 @@
 angular.module('MoodTracker')
 	.controller('MoodController', function($scope, $alert, $auth, UserService) {
+		var alert = {
+			animation: 'fadeZoomFadeDown',
+			type: 'material',
+			duration: 3
+		};
+
 		UserService.getUser().success(function(data) {
 			var moods = data.moods,
 				today = moment().format('YYYY-MM-DD');
@@ -17,12 +23,8 @@ angular.module('MoodTracker')
 			$scope.days = moment().diff(moment(data.startDate), 'd') + 1;
 			$scope.moods = moods;
 		}).error(function() {
-			$alert({
-				content: 'Unable to get user information.',
-				animation: 'fadeZoomFadeDown',
-				type: 'material',
-				duration: 3
-			});
+			alert.content = 'Unable to get user information.';
+			$alert(alert);
 		});
 
 		$scope.updateMood = function() {		
@@ -31,28 +33,16 @@ angular.module('MoodTracker')
 			}).then(function(response) {
 				switch ($scope.mood) {
 					case 'happy': 
-						$alert({
-							content: 'Yay! Stay happy and motivated!',
-							animation: 'fadeZoomFadeDown',
-							type: 'material',
-							duration: 3
-						});
+						alert.content = 'Yay! Stay happy and motivated!';
+						$alert(alert);
 						break;
 					case 'okay':
-						$alert({
-							content: 'You know what you are doing! It\'t gonna get even better!',
-							animation: 'fadeZoomFadeDown',
-							type: 'material',
-							duration: 3
-						});
+						alert.content = 'You know what you are doing! It\'t gonna get even better!';
+						$alert(alert);
 						break;
 					default:
-						$alert({
-							content: 'Cheer up! Take it easy and talk to somebody!',
-							animation: 'fadeZoomFadeDown',
-							type: 'material',
-							duration: 3
-						})
+						alert.content = 'Cheer up! Take it easy and talk to somebody!';
+						$alert(alert);
 				}
 			});
 		};
