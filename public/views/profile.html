@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="panel panel-default">
+    <div class="panel-heading">Welcome</div>
+    <div class="panel-body">
+        <legend><i class="ion-clipboard"></i> Edit My Profile</legend>
+        <form method="post" ng-submit="updateProfile()">
+            <div class="form-group">
+                <label class="control-label"><i class="ion-person"></i> Display Name</label>
+                <input type="text" class="form-control" ng-model="user.displayName" />
+            </div>
+            <button class="btn btn-lg btn-success">Submit</button>
+        </form>
+    </div>
+    </div>
+</div>

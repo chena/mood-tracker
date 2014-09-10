@@ -40,7 +40,7 @@ a {
 }
 
 .navbar-default {
-  color: #fff;
+  color: #333;
   background: #fff;
 }
 
@@ -215,6 +215,7 @@ a {
 .btn-hackerschool {
   color: #fff;
   background-color: #61ae24;
+  margin: 5px;
 }
 
 .btn-hackerschool:hover,
