@@ -6,22 +6,57 @@ angular.module('MoodTracker')
 			duration: 3
 		};
 
+		var genStatData = function(stat) {
+			var data = [];
+			for (var key in stat) {
+				data.push({
+					x: key, 
+					y: [stat[key]]
+				});
+			}
+			return data;
+		}
+
 		UserService.getUser().success(function(data) {
-			var moods = data.moods,
-				today = moment().format('YYYY-MM-DD');
+			$scope.name = data.displayName;
+			$scope.days = moment().diff(moment(data.startDate), 'd') + 1;
 			
+			// deal with moods data
+			var moods = data.moods,
+				today = moment().format('YYYY-MM-DD'),
+				counts = {
+					happy: 0,
+					okay: 0,
+					unhappy: 0
+				};
+
 			$scope.mood = null;
 			for (var i = 0; i < moods.length; i++) {
 				var m = moods[i];
+				counts[m.mood]++;
+				// bind today's mood if it's been logged
 				if (m.date.toString() === today) {
 					$scope.mood = m.mood;
 					break;
 				}
 			}
 
-			$scope.name = data.displayName;
-			$scope.days = moment().diff(moment(data.startDate), 'd') + 1;
-			$scope.moods = moods;
+			$scope.chartType = 'pie';
+			$scope.statData = {
+				data : genStatData(counts)
+			};
+			$scope.config = {
+				labels: false,
+				title: 'Daily Moods',
+				legend: {
+					display: true,
+					position: 'right'
+				},
+				innerRadius: 0,
+				tooltips: true
+			};
+			$scope.loaded = true;
+			$scope.counts = genStatData(counts);
 		}).error(function() {
 			alert.content = 'Unable to get user information.';
 			$alert(alert);

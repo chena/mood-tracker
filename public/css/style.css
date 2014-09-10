@@ -280,3 +280,10 @@ h1, h2, h3, h4, h5, h6 {
     opacity: 1;
   }
 }
+
+[ac-chart] {
+  float:left;
+  width: 50%;
+  height: 300px;
+  margin: 0 1%;
+}

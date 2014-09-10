@@ -22,18 +22,10 @@
     </div>
     </div>
 
-    <div class="panel panel-default">
+    <div ng-if="loaded" class="panel panel-default">
     <div class="panel-heading">Statistics</div>
     <div class="panel-body">
-
+        <div id="pirChart" ac-chart="chartType" ac-data="statData" ac-config="config"></div>
     </div>
     </div>
-
-    <!--<div>
-        <ul>
-            <li ng-repeat="mood in moods">
-                {{mood}}
-            </li>
-        </ul>
-    </div>-->
 </div>
