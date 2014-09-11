@@ -22,6 +22,12 @@ var userSchema = new mongoose.Schema({
 	moods: []
 });
 
+// TODO: configurable mood message
+/*
+var messageSchema = new mongoose.Schema({
+
+});*/
+
 var User = mongoose.model('User', userSchema);
 mongoose.connect(config.MONGO_URI);
 
@@ -130,8 +136,19 @@ app.get('/api/me', ensureAuthenticated, function(req, res) {
 	})
 });
 
-app.put('/api/me', ensureAuthenticated, function() {
+app.put('/api/me', ensureAuthenticated, function(req, res) {
+	User.findById(req.userId, function(err, user) {
+		if (!user) {
+			return res.status(404).send({
+				message: 'User not found.'
+			});
+		}
 
+		user.displayName = req.body.displayName;
+		user.save(function(err) {
+			res.status(200).end();
+		});
+	});
 });
 
 app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
@@ -162,15 +179,6 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 		});
 	})
 });
-
-/*
- |--------------------------------------------------------------------------
- | Helper methods
- |--------------------------------------------------------------------------
- */
- function findUser(userId) {
- 	// TODO: use promise
- }
 
 /*
  |--------------------------------------------------------------------------
