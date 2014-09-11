@@ -1,15 +1,37 @@
 angular.module('MoodTracker')
 	.controller('MoodController', function($scope, $alert, $auth, UserService, AlertService) {
-		var genCountData = function(stat) {
+		var counts = {
+			happy: 0,
+			okay: 0,
+			unhappy: 0
+		};
+
+		var updateCountData = function() {
 			var data = [];
-			for (var key in stat) {
+			for (var key in counts) {
 				data.push({
 					x: key, 
-					y: [stat[key]]
+					y: [counts[key]]
 				});
 			}
-			return data;
-		}
+			$scope.countData = {
+				data: data
+			};
+		};
+
+		var setPieChart = function() {
+			$scope.chartType = 'pie';
+			$scope.config = {
+				labels: false,
+				title: 'Daily Mood Counts',
+				legend: {
+					display: true,
+					position: 'right'
+				},
+				innerRadius: 0,
+				tooltips: true
+			};
+		};
 
 		UserService.getUser().success(function(data) {
 			$scope.name = data.displayName;
@@ -21,11 +43,6 @@ angular.module('MoodTracker')
 			var moods = data.moods;
 			var today = moment().format('YYYY-MM-DD');
 			
-			var counts = {
-					happy: 0,
-					okay: 0,
-					unhappy: 0
-				};
 			/*var days = [];
 			var scores = {
 				happy: 10,
@@ -47,22 +64,8 @@ angular.module('MoodTracker')
 					$scope.mood = m.mood;
 				}
 			}
+			updateCountData();
 
-			// pie chart
-			$scope.chartType = 'pie';
-			$scope.countData = {
-				data: genCountData(counts)
-			};
-			$scope.config = {
-				labels: false,
-				title: 'Daily Mood Counts',
-				legend: {
-					display: true,
-					position: 'right'
-				},
-				innerRadius: 0,
-				tooltips: true
-			};
 
 			// area graph
 			/*
@@ -70,6 +73,7 @@ angular.module('MoodTracker')
 			$scope.daysData = {
 				data: days
 			};*/
+			setPieChart();
 			$scope.loaded = true;
 		}).error(function() {
 			$alert(AlertService.getAlert('Unable to get user information.'));
@@ -84,11 +88,15 @@ angular.module('MoodTracker')
 						$alert(AlertService.getAlert('Yay! Stay happy and motivated!'));
 						break;
 					case 'okay':
-						$alert(AlertService.getAlert('You know what you are doing! It\'t gonna get even better!'););
+						$alert(AlertService.getAlert('You know what you are doing! It\'t gonna get even better!'));
 						break;
 					default:
-						$alert()AlertService.getAlert('Cheer up! Take it easy and talk to somebody!');
+						$alert(AlertService.getAlert('Cheer up! Take it easy and talk to somebody!'));
 				}
+				counts[$scope.mood]++;
+				updateCountData();
+			}).error(function() {
+				$alert(AlertService.getAlert('Unable to log mood.'));
 			});
 		};
 	});
