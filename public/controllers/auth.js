@@ -1,11 +1,5 @@
 angular.module('MoodTracker')
-    .controller('AuthController', function($scope, $auth, $alert, $location) {
-        var alert = {
-            animation: 'fadeZoomFadeDown',
-            type: 'material',
-            duration: 3
-        };
-
+    .controller('AuthController', function($scope, $auth, $alert, $location, AlertService) {
         $scope.isAuthenticated = function() {
             return $auth.isAuthenticated();
         };
@@ -13,23 +7,20 @@ angular.module('MoodTracker')
         $scope.login = function(e) {
             $auth.authenticate('hackerschool').then(function(response) {
                 e.preventDefault(); // prevent href anchor
-                alert.content = 'You have successfully logged in.';
-                $alert(alert);
+                $alert(AlertService.getAlert('You have successfully logged in.'));
                 
                 $scope.name = response.data.name;
                 $location.path('/mood');
 
             }).catch(function(response) {
-                alert.content = response.data;
-                $alert(alert);
+                $alert(AlertService.getAlertresponse.data));
             });
         };
 
         $scope.logout = function(e) {
             $auth.logout().then(function() {
                 e.preventDefault(); // prevent href anchor
-                alert.conetent = 'You have been logged out.';
-                $alert(alert);
+                $alert(AlertService.getAlert('You have been logged out.'));
             });
         }
     });
