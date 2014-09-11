@@ -1,12 +1,9 @@
 angular.module('MoodTracker')
 	.controller('MoodController', function($scope, $alert, $auth, UserService, AlertService) {
-		var counts = {
-			happy: 0,
-			okay: 0,
-			unhappy: 0
-		};
+		var todayMood = null,
+			counts = { happy: 0, okay: 0, unhappy: 0};
 
-		var updateCountData = function() {
+		var setCountData = function() {
 			var data = [];
 			for (var key in counts) {
 				data.push({
@@ -42,39 +39,23 @@ angular.module('MoodTracker')
 			// deal with moods data
 			var moods = data.moods;
 			var today = moment().format('YYYY-MM-DD');
-			
-			/*var days = [];
-			var scores = {
-				happy: 10,
-				okay: 5,
-				unhappy: 0
-			}*/
 
-			$scope.mood = null;
 			for (var i = 0; i < moods.length; i++) {
 				var m = moods[i];
 				counts[m.mood]++;
-				/*days.push({
-					x: i + 1,
-					y: [scores[m.mood]]
-				});*/
 
 				// bind today's mood if it's been logged
 				if (m.date.toString() === today) {
-					$scope.mood = m.mood;
+					todayMood = m.mood;
 				}
 			}
-			updateCountData();
 
-
-			// area graph
-			/*
-			$scope.chartType2 = 'area';
-			$scope.daysData = {
-				data: days
-			};*/
+			$scope.mood = todayMood;
+			setCountData();
 			setPieChart();
-			$scope.loaded = true;
+
+			// only draw if there are data
+			$scope.ready = moods.length > 0;
 		}).error(function() {
 			$alert(AlertService.getAlert('Unable to get user information.'));
 		});
@@ -93,10 +74,14 @@ angular.module('MoodTracker')
 					default:
 						$alert(AlertService.getAlert('Cheer up! Take it easy and talk to somebody!'));
 				}
-				counts[$scope.mood]++;
-				updateCountData();
-			}).error(function() {
-				$alert(AlertService.getAlert('Unable to log mood.'));
+
+				// refresh count and mood data
+				if (todayMood) {
+					$scope.countData.data[Object.keys(counts).indexOf(todayMood)].y[0]--;
+				}
+				$scope.countData.data[Object.keys(counts).indexOf($scope.mood)].y[0]++;
+				todayMood = $scope.mood;
+				$scope.ready = true;
 			});
 		};
 	});
