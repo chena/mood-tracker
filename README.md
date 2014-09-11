@@ -13,13 +13,19 @@ Clone this project, then install dependencies:
 ```
 npm install
 ```
-Start the server:
+To run the app locally, you need to first change Hacker School's `clientId` configuration in `app.js` to allow localhost.
+
+```
+$authProvider.hackerschool({
+	clientId:'be72cf30fe7fb456a522fd3638a4d006d93f4896cf63f34c1d42f26c3985cd81'
+});
+```
+Then start the server and visit the app at `http://localhost:3000/`
 
 ```
 node server.js
 ```
-Then visit the app at `http://localhost:3000/`. Note that you need to be a Hacker Schooler to log in.
-
+Note that you need to be a Hacker Schooler to log in.
 
 ## Demo
 ![daily-log](https://raw.githubusercontent.com/chena/mood-tracker/master/util/mood-tracker.png)

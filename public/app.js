@@ -1,7 +1,7 @@
 angular.module('MoodTracker', ['ngRoute', 'satellizer', 'mgcrea.ngStrap', 'angularCharts'])
     .config(function($authProvider, $routeProvider) {
         $authProvider.hackerschool({
-            clientId: 'be72cf30fe7fb456a522fd3638a4d006d93f4896cf63f34c1d42f26c3985cd81'
+            clientId: '21f403d5828cac30a37e38ad3916f1b9f5a362c695db04a962700bdc53e1d761'
         });
 
         $routeProvider.when('/', {
