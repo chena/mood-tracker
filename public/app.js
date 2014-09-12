@@ -15,6 +15,10 @@ angular.module('MoodTracker', ['ngRoute', 'satellizer', 'mgcrea.ngStrap', 'angul
             templateUrl: '../views/profile.html',
             controller: 'ProfileController'
         })
+        .when('/message', {
+            templateUrl: '../views/message.html',
+            controller: 'MessageController'
+        })
         .otherwise({
             redirect: '/'
         });

@@ -12,7 +12,7 @@ angular.module('MoodTracker')
 			UserService.updateProfile({
 				displayName: $scope.user.displayName
 			}).then(function(){
-				$alert(AlertService.getAlert('Profile has been updated'));
+				$alert(AlertService.getAlert('Profile has been updated.'));
 			});
 		};
 	});

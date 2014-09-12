@@ -16,9 +16,10 @@
             </a>
         </div>
 
-        <ul class="nav navbar-nav">
-            <li ng-if="isAuthenticated()"><a href="/#/mood">Mood Log</a></li>
-            <li ng-if="isAuthenticated()"><a href="/#/profile">Profile</a></li>
+        <ul ng-if="isAuthenticated()" class="nav navbar-nav">
+            <li><a href="/#/mood">Mood Log</a></li>
+            <li><a href="/#/profile">Profile</a></li>
+            <li><a href="/#/message">Messages</a></li>
         </ul>
         <ul ng-if="!isAuthenticated()" class="nav navbar-nav pull-right">
             <li><a href="/" ng-click="login($event)">Login</a></li>

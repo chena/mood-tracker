@@ -22,13 +22,16 @@ var userSchema = new mongoose.Schema({
 	moods: []
 });
 
-// TODO: configurable mood message
-/*
-var messageSchema = new mongoose.Schema({
+// TODO: consider moving moods data to a different collection to do analysis over all users
 
-});*/
+// TODO: configurable mood message
+var messageSchema = new mongoose.Schema({
+	message: String,
+	type: String
+});
 
 var User = mongoose.model('User', userSchema);
+var Message = mongoose.model('Message', messageSchema);
 mongoose.connect(config.MONGO_URI);
 
 /*
@@ -179,6 +182,23 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 		});
 	})
 });
+
+app.get('/api/messages', function(req, res) {
+	messages = {
+		happy: [],
+		okay: [],
+		unhappy: []
+	};
+	Message.find(function(err, messages) {
+		messages.forEach(function(m) {
+			messages[m.type].push(m.message);
+		});
+	});
+});
+
+app.post('/api/messages', function(req, res) {
+	// TODO
+}
 
 /*
  |--------------------------------------------------------------------------
