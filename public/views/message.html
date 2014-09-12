@@ -1,0 +1,24 @@
+<div class="container">
+    <div class="panel panel-default">
+    <div class="panel-heading">Mood Messages</div>
+    <div class="panel-body">
+        <legend><i class="ion-chatbox-working"></i> Add New Message</legend>
+        <p><em>A message will be randomly chosen when someone logs their mood. Add some message to encourage each other!</em></P>
+        <form method="post" ng-submit="addMessage()">
+            <div class="form-group">
+                <label class="control-label">Mood</label>
+                <select class="form-control" ng-model="type">
+                    <option value="happy">Happy
+                    <option value="okay">Okay
+                    <option value="unhappy">Unhappy
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Message</label>
+                <input type="text" class="form-control" ng-model="message" />
+            </div>
+            <button class="btn btn-lg btn-success">Submit</button>
+        </form>
+    </div>
+    </div>
+</div>
