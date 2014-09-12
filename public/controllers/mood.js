@@ -1,7 +1,13 @@
 angular.module('MoodTracker')
-	.controller('MoodController', function($scope, $alert, $auth, UserService, AlertService) {
+	.controller('MoodController', function($scope, $alert, $auth, UserService, AlertService, MessageService) {
 		var todayMood = null,
 			counts = { happy: 0, okay: 0, unhappy: 0};
+
+		var defaultMessages = {
+			happy: 'Yay! Stay happy and motivated!',
+			okay: 'You know what you are doing! It\'t gonna get even better!',
+			unhappy: 'Cheer up! Take it easy and talk to somebody!'
+		};
 
 		var setCountData = function() {
 			var data = [];
@@ -60,20 +66,29 @@ angular.module('MoodTracker')
 			$alert(AlertService.getAlert('Unable to get user information.'));
 		});
 
+		MessageService.getMessages().success(function(data) {
+			$scope.moodMessages = data;
+		}).error(function() {
+			$alert(AlertService.getAlert('Unable to get user information.'));
+		});
+
 		$scope.updateMood = function() {
+			// get a random message
+			var messages = $scope.moodMessages[$scope.mood].concat(defaultMessages[$scope.mood]),
+				num = messages.length,
+				message;
+
+			if (num < 2) {
+				message = messages[0];
+			} else {
+				// choose a random message from the selection
+				message = messages[Math.floor(Math.random() * num)];
+			}
+
 			UserService.logMood({
 				mood: $scope.mood
 			}).then(function(response) {
-				switch ($scope.mood) {
-					case 'happy': 
-						$alert(AlertService.getAlert('Yay! Stay happy and motivated!'));
-						break;
-					case 'okay':
-						$alert(AlertService.getAlert('You know what you are doing! It\'t gonna get even better!'));
-						break;
-					default:
-						$alert(AlertService.getAlert('Cheer up! Take it easy and talk to somebody!'));
-				}
+				$alert(AlertService.getAlert(message));
 
 				// refresh count and mood data
 				if (todayMood) {

@@ -203,7 +203,7 @@ app.post('/api/messages', function(req, res) {
 	msg.message = req.body.message;
 
 	msg.save(function() {
-		res.status(201).send(msg);
+		res.status(201).end();
 	});
 });
 
