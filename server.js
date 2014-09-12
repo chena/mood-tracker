@@ -193,7 +193,7 @@ app.get('/api/messages', function(req, res) {
 		messages.forEach(function(m) {
 			moodMessages[m.get('type')].push(m.get('message'));
 		});
-		res.status(201).end();
+		res.send(moodMessages);
 	});
 });
 
