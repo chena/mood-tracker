@@ -177,28 +177,35 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 			mood: req.body.mood
 		});
 
-		user.save(function(err) {
+		user.save(function() {
 			res.status(200).end();
 		});
 	})
 });
 
 app.get('/api/messages', function(req, res) {
-	messages = {
+	var moodMessages = {
 		happy: [],
 		okay: [],
 		unhappy: []
 	};
-	Message.find(function(err, messages) {
+	Message.find({}, function(err, messages) {
 		messages.forEach(function(m) {
-			messages[m.type].push(m.message);
+			moodMessages[m.get('type')].push(m.get('message'));
 		});
+		res.status(201).end();
 	});
 });
 
 app.post('/api/messages', function(req, res) {
-	// TODO
-}
+	var msg = new Message();
+	msg.type = req.body.type;
+	msg.message = req.body.message;
+
+	msg.save(function() {
+		res.status(201).send(msg);
+	});
+});
 
 /*
  |--------------------------------------------------------------------------
