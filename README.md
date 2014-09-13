@@ -9,7 +9,7 @@ An app that allows you log your mood everyday throughout your Hacker School expe
 
 ## Usage
 
-The app is live here: [hs-mood.herokuapp.com](hs-mood.herokuapp.com).
+The app is live here: [http://hs-mood.herokuapp.com](http://hs-mood.herokuapp.com).
 
 If you want to run it locally, clone this project and install dependencies:
 
