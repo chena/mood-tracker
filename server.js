@@ -26,7 +26,10 @@ var userSchema = new mongoose.Schema({
 
 // TODO: configurable mood message
 var messageSchema = new mongoose.Schema({
-	message: String,
+	message: {
+		type: String,
+		index: {unique: true}
+	},
 	type: String
 });
 
@@ -142,9 +145,7 @@ app.get('/api/me', ensureAuthenticated, function(req, res) {
 app.put('/api/me', ensureAuthenticated, function(req, res) {
 	User.findById(req.userId, function(err, user) {
 		if (!user) {
-			return res.status(404).send({
-				message: 'User not found.'
-			});
+			return res.status(404).send();
 		}
 
 		user.displayName = req.body.displayName;
@@ -157,17 +158,15 @@ app.put('/api/me', ensureAuthenticated, function(req, res) {
 app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 	User.findById(req.userId, function(err, user) {
 		if (!user) {
-			return res.status(404).send({
-				message: 'User not found.'
-			});
+			return res.status(404).send();
 		}
 
 		var moods = user.moods,
-			today = moment().format('YYYY-MM-DD');
+			today = moment();
 		// check if today's mood has already been logged
 		// if so, remove the record
 		for (var i = 0; i < moods.length; i++) {
-			if (moods[i].date.toString() === today) {
+			if (moment(moods[i].date).isSame(today, 'd')) {
 				moods.splice(i, 1);
 				break;
 			}
@@ -202,7 +201,13 @@ app.post('/api/messages', function(req, res) {
 	msg.type = req.body.type;
 	msg.message = req.body.message;
 
-	msg.save(function() {
+	msg.save(function(err) {
+		if (err) {
+			if (err.err.indexOf('duplicate key') > -1) {
+				res.status(409).send();
+			}
+			res.status(500).send();
+		}
 		res.status(201).end();
 	});
 });

@@ -4,8 +4,14 @@ angular.module('MoodTracker')
 			MessageService.addMessage({
 				type: $scope.type,
 				message: $scope.message
-			}).then(function() {
+			}).success(function() {
 				$alert(AlertService.getAlert('Message has been added.'));
+			}).error(function(data, status) {
+				if (status == 409) {
+					$alert(AlertService.getAlert('Message already exists.'));
+				} else {
+					$alert(AlertService.getAlert('Unable to add the message.'));
+				}
 			});
 		};
 	});

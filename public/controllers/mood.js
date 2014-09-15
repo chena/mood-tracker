@@ -68,7 +68,7 @@ angular.module('MoodTracker')
 		MessageService.getMessages().success(function(data) {
 			$scope.moodMessages = data;
 		}).error(function() {
-			$alert(AlertService.getAlert('Unable to get user information.'));
+			$alert(AlertService.getAlert('Unable to get messages.'));
 		});
 
 		$scope.updateMood = function() {
@@ -86,7 +86,7 @@ angular.module('MoodTracker')
 
 			UserService.logMood({
 				mood: $scope.mood
-			}).then(function(response) {
+			}).success(function() {
 				$alert(AlertService.getAlert(message));
 
 				// refresh count and mood data
