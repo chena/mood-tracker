@@ -3,13 +3,10 @@ var moment = require('moment');
 
 var generateMoodSeeds = function(startDate) {
     moods = ['happy', 'okay', 'unhappy'];
-    dailyMoods = [];
+    dailyMoods = {};
 
     for (var date = moment(startDate); !date.isAfter(moment()); date = date.add(1, 'd')) {
-        dailyMoods.push({
-            date: date.format('YYYY-MM-DD'),
-            mood: moods[Math.floor(Math.random() * moods.length)]
-        });
+        dailyMoods[date.format('YYYY-MM-DD')] = moods[Math.floor(Math.random() * moods.length)];
     }
     return dailyMoods;
 };

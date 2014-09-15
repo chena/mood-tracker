@@ -76,7 +76,7 @@ angular.module('MoodTracker')
 			if (num < 2) {
 				message = messages[0];
 			} else {
-				// choose a random message from the selection
+				// choose a random message from the collection
 				message = messages[Math.floor(Math.random() * num)];
 			}
 

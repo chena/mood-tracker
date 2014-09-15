@@ -60,7 +60,7 @@ function ensureAuthenticated(req, res, next) {
 	var token = req.headers.authorization.split(' ')[1];
 	var payload = jwt.decode(token, config.TOKEN_SECRET);
 
-	if (payload.exp <= Date.now()) {
+	if (moment(payload.exp).isBefore(moment())) {
 		return res.status(401).send({ message: 'Token has expired' });
 	}
 
@@ -162,7 +162,7 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 			return res.status(404).send();
 		}
 
-		user.moods[date] = req.body.mood;
+		user.moods[moment().format('YYYY-MM-DD')] = req.body.mood;
 		user.markModified('moods');
 
 		user.save(function() {
