@@ -19,12 +19,11 @@ var userSchema = new mongoose.Schema({
 	hsId: String,
 	startDate: Date,
 	endDate: Date,
-	moods: []
+	moods: {}
+}, {
+	minimize: false // we need to set this so empty object can be persisted
 });
 
-// TODO: consider moving moods data to a different collection to do analysis over all users
-
-// TODO: configurable mood message
 var messageSchema = new mongoose.Schema({
 	message: {
 		type: String,
@@ -120,6 +119,8 @@ app.post('/auth/hackerschool', function(req, res) {
 				user.displayName = profile.first_name + ' ' + profile.last_name;
 				user.startDate = profile.batch.start_date;
 				user.endDate = profile.batch.end_date;
+				user.moods = {};
+				user.markModified('moods');
 
 				user.save(function(err) {
 					res.send({
@@ -161,20 +162,8 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 			return res.status(404).send();
 		}
 
-		var moods = user.moods,
-			today = moment();
-		// check if today's mood has already been logged
-		// if so, remove the record
-		for (var i = 0; i < moods.length; i++) {
-			if (moment(moods[i].date).isSame(today, 'd')) {
-				moods.splice(i, 1);
-				break;
-			}
-		}
-		user.moods.push({
-			date: today.format('YYYY-MM-DD'),
-			mood: req.body.mood
-		});
+		user.moods[date] = req.body.mood;
+		user.markModified('moods');
 
 		user.save(function() {
 			res.status(200).end();

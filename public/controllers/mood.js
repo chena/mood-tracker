@@ -42,26 +42,21 @@ angular.module('MoodTracker')
 			// FIXME: buggy??? How come using current in the view causes $scope.mood to be always null??
 			$scope.current = !moment().isBefore(data.startDate) && !moment().isAfter(data.endDate);
 			
-			// deal with moods data
-			var moods = data.moods;
-			var today = moment();
+			var moods = data.moods, 
+				dates = Object.keys(moods);
 
-			for (var i = 0; i < moods.length; i++) {
-				var m = moods[i];
-				counts[m.mood]++;
+			dates.forEach(function(d) {
+				counts[moods[d]]++;
+			});
 
-				// bind today's mood if it's been logged
-				if (moment(m.date).isSame(today, 'd')) {
-					todayMood = m.mood;
-				}
-			}			
-
+			todayMood = moods[moment().format('YYYY-MM-DD')];
 			$scope.mood = todayMood;
+
 			setCountData();
 			setPieChart();
 
 			// only draw if there are data
-			$scope.ready = moods.length > 0;
+			$scope.ready = dates.length > 0;
 		}).error(function() {
 			$alert(AlertService.getAlert('Unable to get user information.'));
 		});
