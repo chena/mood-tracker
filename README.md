@@ -8,12 +8,15 @@ An app that allows you log your mood everyday throughout your Hacker School expe
 * The project skeleton and styles are based on the example provided in [Satellizer](https://github.com/sahat/satellizer) thanks to [Sahat Yalkabov](https://github.com/sahat/).
 
 ## Usage
-Clone this project, then install dependencies:
+
+The app is live here: [http://hs-mood.herokuapp.com](http://hs-mood.herokuapp.com).
+
+If you want to run it locally, clone this project and install dependencies:
 
 ```
 npm install
 ```
-To run the app locally, you need to first change Hacker School's `clientId` configuration in `app.js` to allow localhost.
+You need to first change Hacker School's `clientId` configuration in `app.js` to allow localhost.
 
 ```
 $authProvider.hackerschool({
