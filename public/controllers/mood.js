@@ -38,6 +38,7 @@ angular.module('MoodTracker')
 
 		UserService.getUser().success(function(data) {
 			$scope.name = data.displayName;
+			$scope.days = moment().diff(moment(data.startDate), 'd') + 1;
 			// FIXME: buggy??? How come using current in the view causes $scope.mood to be always null??
 			$scope.current = !moment().isBefore(data.startDate) && !moment().isAfter(data.endDate);
 			

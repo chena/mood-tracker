@@ -172,7 +172,7 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 			}
 		}
 		user.moods.push({
-			date: today,
+			date: today.format('YYYY-MM-DD'),
 			mood: req.body.mood
 		});
 
