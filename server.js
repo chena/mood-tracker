@@ -17,6 +17,7 @@ var config = require('./config');
 var userSchema = new mongoose.Schema({
 	displayName: String,
 	hsId: String,
+	email: String,
 	startDate: Date,
 	endDate: Date,
 	moods: {}
@@ -116,6 +117,7 @@ app.post('/auth/hackerschool', function(req, res) {
 				}
 				var user = new User();
 				user.hsId = profile.id;
+				user.email = profile.email;
 				user.displayName = profile.first_name + ' ' + profile.last_name;
 				user.startDate = profile.batch.start_date;
 				user.endDate = profile.batch.end_date;
@@ -171,6 +173,7 @@ app.put('/api/me/moods', ensureAuthenticated, function(req, res) {
 	})
 });
 
+// this is a public endpoint
 app.get('/api/messages', function(req, res) {
 	var moodMessages = {
 		happy: [],
@@ -185,7 +188,7 @@ app.get('/api/messages', function(req, res) {
 	});
 });
 
-app.post('/api/messages', function(req, res) {
+app.post('/api/messages', ensureAuthenticated, function(req, res) {
 	var msg = new Message();
 	msg.type = req.body.type;
 	msg.message = req.body.message;
