@@ -60,7 +60,7 @@ app.use(express.static(__dirname + '/public'));
  |--------------------------------------------------------------------------
  */
 function requireSSL(req, res, next) {
-	if (app.get('env') === 'production' && req.get('HTTP_X_FORWARDED_PROTO') !== 'https') {
+	if (app.get('env') === 'production' && req.get('x-forwarded-proto') !== 'https') {
 		res.redirect('https://' + req.hostname + req.url);
 	} else {
 		next();
