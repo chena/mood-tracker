@@ -51,7 +51,7 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(requireSSL);
+//app.use(requireSSL);
 app.use(express.static(__dirname + '/public'));
 
 /*
@@ -61,7 +61,7 @@ app.use(express.static(__dirname + '/public'));
  */
 function requireSSL(req, res, next) {
 	if (app.get('env') === 'production' && req.get('HTTP_X_FORWARDED_PROTO') !== 'https') {
-		app.redirect('https://' + req.hostname + req.url);
+		res.redirect('https://' + req.hostname + req.url);
 	} else {
 		next();
 	}
