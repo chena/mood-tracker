@@ -1,13 +1,11 @@
 var express = require('express');
 var request = require('request');
 var bodyParser = require('body-parser');
-
 var jwt = require('jwt-simple');
 var moment = require('moment');
-
 var mongoose = require('mongoose');
-
 var config = require('./config');
+var defaultMessages = require('./util/data/messages.json')
 
 /*
  |--------------------------------------------------------------------------
@@ -36,6 +34,13 @@ var messageSchema = new mongoose.Schema({
 var User = mongoose.model('User', userSchema);
 var Message = mongoose.model('Message', messageSchema);
 mongoose.connect(config.MONGO_URI);
+
+// seed data
+Message.find({}, function(err, messages) {
+	if (messages.length == 0) {
+		Message.create(defaultMessages);
+	}
+});
 
 /*
  |--------------------------------------------------------------------------

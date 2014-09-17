@@ -1,0 +1,14 @@
+[  
+   {  
+      "message":"Yay! Stay happy and motivated!",
+      "type":"happy"
+   },
+   {  
+      "message":"You know what you are doing! It't gonna get even better!",
+      "type":"okay"
+   },
+   {  
+      "message":"Cheer up! Take it easy and talk to somebody!",
+      "type":"unhappy"
+   }
+]

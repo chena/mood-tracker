@@ -3,12 +3,6 @@ angular.module('MoodTracker')
 		var todayMood = null,
 			counts = { happy: 0, okay: 0, unhappy: 0};
 
-		var defaultMessages = {
-			happy: 'Yay! Stay happy and motivated!',
-			okay: 'You know what you are doing! It\'t gonna get even better!',
-			unhappy: 'Cheer up! Take it easy and talk to somebody!'
-		};
-
 		var setCountData = function() {
 			var data = [];
 			for (var key in counts) {
@@ -69,7 +63,7 @@ angular.module('MoodTracker')
 
 		$scope.updateMood = function() {
 			// get a random message
-			var messages = $scope.moodMessages[$scope.mood].concat(defaultMessages[$scope.mood]),
+			var messages = $scope.moodMessages[$scope.mood],
 				num = messages.length,
 				message;
 
