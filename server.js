@@ -51,13 +51,22 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(requireSSL);
 app.use(express.static(__dirname + '/public'));
 
 /*
  |--------------------------------------------------------------------------
- | Login required middleware
+ | Security middleware
  |--------------------------------------------------------------------------
  */
+function requireSSL(req, res, next) {
+	if (app.get('env') === 'production' && req.protocol !== 'https') {
+		app.redirect('https://' + req.hostname + req.url);
+	} else {
+		next();
+	}
+}
+
 function ensureAuthenticated(req, res, next) {
 	if (!req.headers.authorization) {
 		return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
