@@ -50,7 +50,7 @@ Message.find({}, function(err, messages) {
 var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(requireSSL);
 app.use(express.static(__dirname + '/public'));
 
@@ -60,7 +60,10 @@ app.use(express.static(__dirname + '/public'));
  |--------------------------------------------------------------------------
  */
 function requireSSL(req, res, next) {
+	console.log(app.get('env'));
+	console.log(req.get('x-forwarded-proto'));
 	if (app.get('env') === 'production' && req.get('x-forwarded-proto') !== 'https') {
+		console.log('should redirect?');
 		res.redirect('https://' + req.hostname + req.url);
 	} else {
 		next();
