@@ -13,7 +13,7 @@ angular.module('MoodTracker')
                 $location.path('/mood');
 
             }).catch(function(response) {
-                $alert(AlertService.getAlertresponse.data);
+                $alert(AlertService.getAlert(response.data));
             });
         };
 

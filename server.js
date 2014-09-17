@@ -51,7 +51,14 @@ var app = express();
 app.set('port', process.env.PORT || 3000);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(requireSSL);
+//app.use(requireSSL);
+if (app.get('env') === 'production') {
+  app.use(function(req, res, next) {
+    var protocol = req.get('x-forwarded-proto');
+    protocol == 'https' ? next() : res.redirect('https://' + req.hostname + req.url);
+  });
+}
+
 app.use(express.static(__dirname + '/public'));
 
 /*
@@ -59,13 +66,14 @@ app.use(express.static(__dirname + '/public'));
  | Security middleware
  |--------------------------------------------------------------------------
  */
+/*
 function requireSSL(req, res, next) {
 	if (app.get('env') === 'production' && req.get('x-forwarded-proto') !== 'https') {
 		res.redirect('https://' + req.hostname + req.url);
 	} else {
 		next();
 	}
-}
+}*/
 
 function ensureAuthenticated(req, res, next) {
 	if (!req.headers.authorization) {
