@@ -1,9 +1,9 @@
 angular.module('MoodTracker')
-	.controller('MessageController', function($scope, $alert, AlertService, MessageService) {
+	.controller('MessageController', function($scope, $alert, $sanitize, AlertService, MessageService) {
 		$scope.addMessage = function() {
 			MessageService.addMessage({
 				type: $scope.type,
-				message: $scope.message
+				message: $sanitize($scope.message)
 			}).success(function() {
 				$alert(AlertService.getAlert('Message has been added.'));
 			}).error(function(data, status) {
