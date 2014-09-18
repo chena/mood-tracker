@@ -1,7 +1,7 @@
 angular.module('MoodTracker')
 	.controller('MoodController', function($scope, $alert, $auth, UserService, AlertService, MessageService) {
 		var todayMood = null,
-			counts = { happy: 0, okay: 0, unhappy: 0};
+			counts = {happy: 0, okay: 0, unhappy: 0};
 
 		var setCountData = function() {
 			var data = [];

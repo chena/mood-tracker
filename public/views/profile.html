@@ -3,10 +3,10 @@
     <div class="panel-heading">Profile</div>
     <div class="panel-body">
         <legend><i class="ion-clipboard"></i> Edit My Profile</legend>
-        <form method="post" ng-submit="updateProfile()">
+        <form method="post" ng-submit="updateProfile()" name="profileForm">
             <div class="form-group">
                 <label class="control-label">Display Name</label>
-                <input type="text" class="form-control" ng-model="user.displayName" />
+                <input type="text" class="form-control" ng-model="user.displayName" required />
             </div>
 
             <div class="form-group">
@@ -24,7 +24,7 @@
                 <input type="text" class="form-control" ng-model="endDate" disabled />
             </div>
 
-            <button class="btn btn-lg btn-success">Submit</button>
+            <button class="btn btn-lg btn-success" ng-disabled="profileForm.$invalid">Submit</button>
         </form>
     </div>
     </div>

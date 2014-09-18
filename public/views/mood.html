@@ -3,9 +3,9 @@
     <div class="panel-heading">Hacker School Day {{days}}</div>
     <div class="panel-body">
         <legend><i class="ion-android-hand"></i> Hi {{name}}, How are you today?</legend>
-        <form method="post" ng-submit="updateMood()">
+        <form method="post" ng-submit="updateMood()" name="moodForm">
             <div class="form-group">
-                <div class="btn-group" ng-model="mood" data-bs-radio-group>
+                <div class="btn-group" ng-model="mood" data-bs-radio-group required>
                     <label class="btn btn-default">
                         <input type="radio" value="happy">Happy
                     </label>
@@ -17,7 +17,7 @@
                     </label>
                 </div>
             </div>
-            <button class="btn btn-lg btn-success">Submit</button>
+            <button class="btn btn-lg btn-success" ng-disabled="moodForm.$invalid">Submit</button>
         </form>
     </div>
     </div>
