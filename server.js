@@ -5,7 +5,6 @@ var config = require('./config');
 var Message = require('./server/models/message');
 var defaultMessages = require('./util/data/messages.json');
 
-
 /*
  |--------------------------------------------------------------------------
  | Database Connection and Setup

@@ -4,7 +4,6 @@ var request = require('request');
 var config = require('./../../config');
 var User = require('./../models/user');
 
-
 /*
  |--------------------------------------------------------------------------
  | Generate JSON Web Token

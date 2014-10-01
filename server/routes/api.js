@@ -5,6 +5,11 @@ var config = require('./../../config');
 var User = require('./../models/user');
 var Message = require('./../models/message');
 
+/*
+ |--------------------------------------------------------------------------
+ | Login Required Middleware
+ |--------------------------------------------------------------------------
+ */
 function ensureAuthenticated(req, res, next) {
 	if (!req.headers.authorization) {
 		return res.status(401).send({ message: 'Please make sure your request has an Authorization header' });
