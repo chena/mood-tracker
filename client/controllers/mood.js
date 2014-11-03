@@ -30,6 +30,8 @@ angular.module('MoodTracker')
 			};
 		};
 
+		$scope.date = moment().format('MMMM Do YYYY');
+
 		UserService.getUser().success(function(data) {
 			$scope.name = data.displayName;
 			$scope.days = moment().diff(moment(data.startDate), 'd') + 1;
